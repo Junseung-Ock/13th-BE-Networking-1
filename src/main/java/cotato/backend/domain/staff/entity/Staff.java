@@ -1,0 +1,45 @@
+package cotato.backend.domain.staff.entity;
+
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "staff")
+public class Staff {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private Integer age;
+
+    @Column(nullable = false, unique = true)
+    private String phoneNumber;
+
+    @Column(nullable = false)
+    private Role role;
+
+    @Builder
+    public Staff(String name, Integer age, String phoneNumber, Role role) {
+        this.name = name;
+        this.age = age;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+    }
+
+    public void update(String name, Integer age, String phoneNumber, Role role) {
+        this.name = name;
+        this.age = age;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+    }
+}
