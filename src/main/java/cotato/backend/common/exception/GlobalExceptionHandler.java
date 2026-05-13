@@ -2,6 +2,8 @@ package cotato.backend.common.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -36,4 +38,19 @@ public class GlobalExceptionHandler {
 			.status(e.getErrorCode().getHttpStatus())
 			.body(errorResponse);
 	}
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationException(
+            MethodArgumentNotValidException e, HttpServletRequest request) {
+        log.error("Validation 실패: {}", e.getMessage());
+        String message = e.getBindingResult().getFieldErrors()
+                .stream()
+                .map(FieldError::getDefaultMessage)
+                .findFirst()
+                .orElse("유효성 검사 실패");
+        ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INVALID_PARAMETER, request, message);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
 }
