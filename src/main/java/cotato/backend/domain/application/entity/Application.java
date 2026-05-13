@@ -41,6 +41,9 @@ public class Application {
     @OneToMany(mappedBy = "application")
     private List<Like> likes = new ArrayList<>();
 
+    @Column(nullable = false)
+    private int likesCount = 0;
+
     @Builder
     public Application(Applicant applicant, Integer period, Part part,
                        Integer ability, Integer passion, String applicationTime) {
@@ -50,9 +53,14 @@ public class Application {
         this.ability = ability;
         this.passion = passion;
         this.applicationTime = applicationTime;
+        this.likesCount = 0;
     }
 
     public int getLikeCount() {
         return this.likes.size();
+    }
+
+    public void increaseLikesCount() {
+        this.likesCount++;
     }
 }

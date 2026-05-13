@@ -42,8 +42,8 @@ public class Applicant {
     // update() 메서드로 정보 수정
     // setter 사용 x
     public void update(String name, Integer age, String phoneNumber) {
-        this.name = name;
-        this.age = age;
-        this.phoneNumber = phoneNumber;
+        if (name != null) this.name = name;
+        if (age != null) this.age = age;
+        if (phoneNumber != null) this.phoneNumber = phoneNumber;
     }
 }

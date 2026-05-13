@@ -1,5 +1,6 @@
 package cotato.backend.api.staff.dto;
 
+import cotato.backend.domain.staff.entity.Role;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,5 +11,5 @@ public class StaffResponse {
     private String name;
     private Integer age;
     private String phoneNumber;
-    private String role;
+    private Role role;
 }
