@@ -52,7 +52,7 @@ public class Application {
         this.applicationTime = applicationTime;
     }
 
-    public int incrementLikeCount() {
+    public int getLikeCount() {
         return this.likes.size();
     }
 }
