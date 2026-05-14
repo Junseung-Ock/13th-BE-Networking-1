@@ -69,14 +69,14 @@ public class ApplicationService {
     }
 
     public List<ApplicationListResponse> getApplicationList(ApplicationListRequest request) {
-        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getPageSize());
+        Pageable pageable = PageRequest.of(request.getPage() - 1, 10);
 
         List<Application> applications = switch (request.getFilterBy()) {
             case "gisu" -> applicationRepository
                     .findByPeriod(request.getPeriod(), pageable)
                     .getContent();
             case "likes" -> applicationRepository
-                    .findAllByOrderByLikesCountDesc(pageable)
+                    .findAllByOrderByLikesCountDesc(PageRequest.of(0, 10))
                     .getContent();
             case "gisu+likes" -> applicationRepository
                     .findByPeriodOrderByLikesCountDesc(request.getPeriod(), pageable)

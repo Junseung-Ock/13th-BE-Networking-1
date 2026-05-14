@@ -33,7 +33,7 @@ public class ApplicationController {
 
     @GetMapping
     public ResponseEntity<DataResponse<List<ApplicationListResponse>>> getList(
-            @ModelAttribute ApplicationListRequest request) {
+            @Valid @ModelAttribute ApplicationListRequest request) {
         return ResponseEntity.ok(DataResponse.from(applicationService.getApplicationList(request)));
     }
 }
