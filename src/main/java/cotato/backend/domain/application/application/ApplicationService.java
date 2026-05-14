@@ -90,7 +90,7 @@ public class ApplicationService {
                         .name(a.getApplicant().getName())
                         .period(a.getPeriod())
                         .part(a.getPart())
-                        .likesCount(a.getLikeCount())
+                        .likesCount(a.getLikesCount())
                         .build())
                 .toList();
     }

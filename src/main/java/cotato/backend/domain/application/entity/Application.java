@@ -57,10 +57,6 @@ public class Application {
         this.likesCount = 0;
     }
 
-    public int getLikeCount() {
-        return this.likes.size();
-    }
-
     public void increaseLikesCount() {
         this.likesCount++;
     }
