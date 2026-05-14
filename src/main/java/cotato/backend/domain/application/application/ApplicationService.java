@@ -37,6 +37,10 @@ public class ApplicationService {
                                 .build()
                 ));
 
+        if (applicationRepository.existsByApplicantAndPeriod(applicant, request.getPeriod())) {
+            throw new AppException(ErrorCode.DUPLICATE_APPLICATION);
+        }
+
         applicationRepository.save(Application.builder()
                 .applicant(applicant)
                 .period(request.getPeriod())
