@@ -1,7 +1,6 @@
 package cotato.backend.domain.application.application;
 
 import cotato.backend.api.application.dto.ApplicationDetailResponse;
-import cotato.backend.api.application.dto.ApplicationListRequest;
 import cotato.backend.api.application.dto.ApplicationListResponse;
 import cotato.backend.api.application.dto.ApplicationRequest;
 import cotato.backend.common.exception.AppException;
@@ -12,7 +11,6 @@ import cotato.backend.domain.application.dao.ApplicationRepository;
 import cotato.backend.domain.application.entity.Application;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,20 +57,18 @@ public class ApplicationService {
         return ApplicationDetailResponse.from(app);
     }
 
-    public List<ApplicationListResponse> getApplicationList(ApplicationListRequest request) {
-        Pageable pageable = PageRequest.of(request.getPage() - 1, 10);
-
-        List<Application> applications = switch (request.getFilterBy()) {
+    public List<ApplicationListResponse> getApplicationList(String filterBy, Integer period, int page, int pageSize) {
+        List<Application> applications = switch (filterBy) {
             case "gisu" -> {
-                if (request.getPeriod() < 1) throw new AppException(ErrorCode.INVALID_PARAMETER);
-                yield applicationRepository.findByPeriod(request.getPeriod(), pageable).getContent();
+                if (period == null || period < 1) throw new AppException(ErrorCode.INVALID_PARAMETER);
+                yield applicationRepository.findByPeriod(period, PageRequest.of(page - 1, pageSize)).getContent();
             }
             case "likes" -> applicationRepository
-                    .findAllByOrderByLikesCountDesc(PageRequest.of(0, 10))
+                    .findAllByOrderByLikesCountDesc(PageRequest.of(page - 1, pageSize))
                     .getContent();
             case "gisu+likes" -> {
-                if (request.getPeriod() < 1) throw new AppException(ErrorCode.INVALID_PARAMETER);
-                yield applicationRepository.findByPeriodOrderByLikesCountDesc(request.getPeriod(), pageable).getContent();
+                if (period == null || period < 1) throw new AppException(ErrorCode.INVALID_PARAMETER);
+                yield applicationRepository.findByPeriodOrderByLikesCountDesc(period, PageRequest.of(page - 1, pageSize)).getContent();
             }
             default -> throw new AppException(ErrorCode.INVALID_FILTER);
         };
