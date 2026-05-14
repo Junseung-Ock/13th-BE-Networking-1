@@ -6,6 +6,7 @@ import cotato.backend.common.dto.DataResponse;
 import cotato.backend.domain.like.application.LikeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +18,7 @@ public class LikeController {
     private final LikeService likeService;
 
     @PostMapping
-    public ResponseEntity<DataResponse<Void>> like(@RequestBody @Valid LikeRequest request) {
-        likeService.like(request);
-        return ResponseEntity.ok(DataResponse.ok());
+    public ResponseEntity<DataResponse<LikeResponse>> like(@RequestBody @Valid LikeRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(DataResponse.created(likeService.like(request)));
     }
 }

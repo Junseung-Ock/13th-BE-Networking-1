@@ -18,34 +18,28 @@ public class StaffService {
     private final StaffRepository staffRepository;
 
     @Transactional
-    public Long registerStaff(StaffRequest request) {
+    public StaffResponse registerStaff(StaffRequest request) {
         Staff staff = staffRepository.save(Staff.builder()
                 .name(request.getName())
                 .age(request.getAge())
                 .phoneNumber(request.getPhoneNumber())
                 .role(request.getRole())
                 .build());
-        return staff.getId();
+        return StaffResponse.from(staff);
     }
 
     public StaffResponse getStaffById(Long id) {
         Staff staff = staffRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
-
-        return StaffResponse.builder()
-                .id(staff.getId())
-                .name(staff.getName())
-                .age(staff.getAge())
-                .phoneNumber(staff.getPhoneNumber())
-                .role(staff.getRole())
-                .build();
+        return StaffResponse.from(staff);
     }
 
     @Transactional
-    public void updateStaff(Long id, StaffRequest request) {
+    public StaffResponse updateStaff(Long id, StaffRequest request) {
         Staff staff = staffRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
 
         staff.update(request.getName(), request.getAge(), request.getPhoneNumber(), request.getRole());
+        return StaffResponse.from(staff);
     }
 }

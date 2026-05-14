@@ -8,6 +8,7 @@ import cotato.backend.common.dto.DataResponse;
 import cotato.backend.domain.application.application.ApplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +22,8 @@ public class ApplicationController {
     private final ApplicationService applicationService;
 
     @PostMapping
-    public ResponseEntity<DataResponse<Void>> register(@RequestBody @Valid ApplicationRequest request) {
-        applicationService.registerApplication(request);
-        return ResponseEntity.ok(DataResponse.ok());
+    public ResponseEntity<DataResponse<ApplicationDetailResponse>> register(@RequestBody @Valid ApplicationRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(DataResponse.created(applicationService.registerApplication(request)));
     }
 
     @GetMapping("/{id}")

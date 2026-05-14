@@ -1,6 +1,7 @@
 package cotato.backend.domain.like.application;
 
 import cotato.backend.api.like.dto.LikeRequest;
+import cotato.backend.api.like.dto.LikeResponse;
 import cotato.backend.common.exception.AppException;
 import cotato.backend.common.exception.ErrorCode;
 import cotato.backend.domain.application.dao.ApplicationRepository;
@@ -24,7 +25,7 @@ public class LikeService {
     private final StaffRepository staffRepository;
 
     @Transactional
-    public void like(LikeRequest request) {
+    public LikeResponse like(LikeRequest request) {
         Application application = applicationRepository.findById(request.getApplicationId())
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
 
@@ -36,11 +37,13 @@ public class LikeService {
             throw new AppException(ErrorCode.ALREADY_LIKED);
         }
 
-        likeRepository.save(Like.builder()
+        Like like = likeRepository.save(Like.builder()
                 .application(application)
                 .staff(staff)
                 .build());
 
         application.increaseLikesCount();
+
+        return LikeResponse.from(like);
     }
 }

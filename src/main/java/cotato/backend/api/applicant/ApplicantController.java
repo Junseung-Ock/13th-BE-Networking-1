@@ -21,10 +21,9 @@ public class ApplicantController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<DataResponse<Void>> update(
+    public ResponseEntity<DataResponse<ApplicantResponse>> update(
             @PathVariable Long id,
             @RequestBody ApplicantRequest request) {
-        applicantService.updateApplicant(id, request);
-        return ResponseEntity.ok(DataResponse.ok());
+        return ResponseEntity.ok(DataResponse.from(applicantService.updateApplicant(id, request)));
     }
 }

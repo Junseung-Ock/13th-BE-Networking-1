@@ -20,20 +20,15 @@ public class ApplicantService {
     public ApplicantResponse getApplicantById(Long id) {
         Applicant applicant = applicantRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
-
-        return ApplicantResponse.builder()
-                .id(applicant.getId())
-                .name(applicant.getName())
-                .age(applicant.getAge())
-                .phoneNumber(applicant.getPhoneNumber())
-                .build();
+        return ApplicantResponse.from(applicant);
     }
 
     @Transactional
-    public void updateApplicant(Long id, ApplicantRequest request) {
+    public ApplicantResponse updateApplicant(Long id, ApplicantRequest request) {
         Applicant applicant = applicantRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
 
         applicant.update(request.getName(), request.getAge(), request.getPhoneNumber());
+        return ApplicantResponse.from(applicant);
     }
 }

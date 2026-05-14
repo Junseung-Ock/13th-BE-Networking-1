@@ -27,7 +27,7 @@ public class ApplicationService {
     private final ApplicantRepository applicantRepository;
 
     @Transactional
-    public void registerApplication(ApplicationRequest request) {
+    public ApplicationDetailResponse registerApplication(ApplicationRequest request) {
         Applicant applicant = applicantRepository.findByPhoneNumber(request.getPhoneNumber())
                 .orElseGet(() -> applicantRepository.save(
                         Applicant.builder()
@@ -41,7 +41,7 @@ public class ApplicationService {
             throw new AppException(ErrorCode.DUPLICATE_APPLICATION);
         }
 
-        applicationRepository.save(Application.builder()
+        Application application = applicationRepository.save(Application.builder()
                 .applicant(applicant)
                 .period(request.getPeriod())
                 .part(request.getPart())
@@ -49,23 +49,14 @@ public class ApplicationService {
                 .passion(request.getPassion())
                 .applicationTime(request.getApplicationTime())
                 .build());
+
+        return ApplicationDetailResponse.from(application);
     }
 
     public ApplicationDetailResponse getApplicationById(Long id) {
         Application app = applicationRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
-
-        return ApplicationDetailResponse.builder()
-                .id(app.getId())
-                .name(app.getApplicant().getName())
-                .period(app.getPeriod())
-                .age(app.getApplicant().getAge())
-                .part(app.getPart())
-                .ability(app.getAbility())
-                .passion(app.getPassion())
-                .phoneNumber(app.getApplicant().getPhoneNumber())
-                .applicationTime(app.getApplicationTime())
-                .build();
+        return ApplicationDetailResponse.from(app);
     }
 
     public List<ApplicationListResponse> getApplicationList(ApplicationListRequest request) {
@@ -87,13 +78,7 @@ public class ApplicationService {
         };
 
         return applications.stream()
-                .map(a -> ApplicationListResponse.builder()
-                        .id(a.getId())
-                        .name(a.getApplicant().getName())
-                        .period(a.getPeriod())
-                        .part(a.getPart())
-                        .likesCount(a.getLikesCount())
-                        .build())
+                .map(ApplicationListResponse::from)
                 .toList();
     }
 }
