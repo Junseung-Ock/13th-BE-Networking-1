@@ -38,5 +38,6 @@ public class ApplicationRequest {
     private String phoneNumber;
 
     @NotBlank
-    private String applicationTime;  // "yyyy-MM-dd HH:mm"
+    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$", message = "서류 제출 시간은 yyyy-MM-dd HH:mm 형식이어야 합니다")
+    private String applicationTime;
 }
