@@ -72,15 +72,17 @@ public class ApplicationService {
         Pageable pageable = PageRequest.of(request.getPage() - 1, 10);
 
         List<Application> applications = switch (request.getFilterBy()) {
-            case "gisu" -> applicationRepository
-                    .findByPeriod(request.getPeriod(), pageable)
-                    .getContent();
+            case "gisu" -> {
+                if (request.getPeriod() < 1) throw new AppException(ErrorCode.INVALID_PARAMETER);
+                yield applicationRepository.findByPeriod(request.getPeriod(), pageable).getContent();
+            }
             case "likes" -> applicationRepository
                     .findAllByOrderByLikesCountDesc(PageRequest.of(0, 10))
                     .getContent();
-            case "gisu+likes" -> applicationRepository
-                    .findByPeriodOrderByLikesCountDesc(request.getPeriod(), pageable)
-                    .getContent();
+            case "gisu+likes" -> {
+                if (request.getPeriod() < 1) throw new AppException(ErrorCode.INVALID_PARAMETER);
+                yield applicationRepository.findByPeriodOrderByLikesCountDesc(request.getPeriod(), pageable).getContent();
+            }
             default -> throw new AppException(ErrorCode.INVALID_FILTER);
         };
 

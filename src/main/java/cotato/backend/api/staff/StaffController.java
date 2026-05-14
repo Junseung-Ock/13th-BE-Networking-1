@@ -30,7 +30,7 @@ public class StaffController {
     @PatchMapping("/{id}")
     public ResponseEntity<DataResponse<Void>> update(
             @PathVariable Long id,
-            @RequestBody StaffRequest request) {
+            @RequestBody @Valid StaffRequest request) {
         staffService.updateStaff(id, request);
         return ResponseEntity.ok(DataResponse.ok());
     }
