@@ -25,6 +25,7 @@ public class Application {
     @Column(nullable = false)
     private Integer period;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Part part;
 
