@@ -19,6 +19,6 @@ public class StaffRequest {
     @Pattern(regexp = "^010\\d{8}$", message = "휴대폰 번호는 010으로 시작하는 11자리여야 합니다")
     private String phoneNumber;
 
-    @NotBlank(message = "역할은 필수입니다")
+    @NotNull(message = "역할은 필수입니다")
     private Role role; // 파트장, 기획팀장, 홍보팀장, 부회장, 회장, 교육팀장
 }

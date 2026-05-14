@@ -20,7 +20,7 @@ public class ApplicationRequest {
     @Max(value = 30, message = "나이는 30살 이하여야 합니다")
     private Integer age;
 
-    @NotBlank(message = "지원 파트는 필수 입력값입니다")
+    @NotNull(message = "지원 파트는 필수 입력값입니다")
     private Part part;
 
     @NotNull(message = "실력은 필수 입력값입니다")
