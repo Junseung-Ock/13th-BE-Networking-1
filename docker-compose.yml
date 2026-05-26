@@ -2,6 +2,7 @@ services:
   db:
     image: mysql:8.0
     container_name: cotato_db
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME:-cotato_db}
@@ -20,6 +21,7 @@ services:
   app:
     build: .
     container_name: cotato_app
+    restart: unless-stopped
     ports:
       - "8080:8080"
     environment:
